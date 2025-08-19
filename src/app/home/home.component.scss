@@ -1,0 +1,696 @@
+// Variables du clan Nara
+$nara-dark: #0a0a0a;
+$nara-purple: #4a148c;
+$nara-blue: #1a237e;
+$nara-shadow: #1a1a1a;
+$nara-gold: #ffd700;
+$nara-silver: #c0c0c0;
+
+.nara-clan-container {
+    background: linear-gradient(135deg, $nara-dark 0%, $nara-purple 50%, $nara-blue 100%);
+    min-height: 100vh;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+// Section héro avec logo du clan Nara
+.hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(74, 20, 140, 0.3) 0%, rgba(10, 10, 10, 0.9) 100%);
+
+    .shadow-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.8) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(74, 20, 140, 0.6) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 40px;
+
+        .clan-logo {
+            margin-bottom: 30px;
+
+            .logo-container {
+                position: relative;
+                width: 250px;
+                height: 250px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .nara-symbol {
+                    width: 200px;
+                    height: 200px;
+                    object-fit: contain;
+                    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+                    animation: symbolRotate 20s linear infinite;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+                    }
+                }
+
+                .logo-glow {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 220px;
+                    height: 220px;
+                    background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+                    border-radius: 50%;
+                    animation: glowPulse 3s ease-in-out infinite alternate;
+                    pointer-events: none;
+                }
+            }
+        }
+
+        .clan-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, $nara-gold, $nara-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+
+            @media (max-width: 768px) {
+                font-size: 3rem;
+            }
+        }
+
+        .clan-motto {
+            font-size: 1.5rem;
+            color: $nara-silver;
+            margin-bottom: 40px;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+        }
+
+        .shikamaru-quote {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid $nara-purple;
+            backdrop-filter: blur(10px);
+
+            p {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+                color: $nara-silver;
+            }
+
+            .quote-author {
+                color: $nara-gold;
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
+// Section photo avec cadre
+.photo-section {
+    padding: 80px 20px;
+    background: rgba(0, 0, 0, 0.6);
+
+    .photo-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
+
+    .photo-frame {
+        position: relative;
+        width: 400px;
+        height: 300px;
+        margin: 0 auto;
+
+        .frame-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid $nara-gold;
+            border-radius: 15px;
+            box-shadow:
+                0 0 30px rgba(255, 215, 0, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+
+            .frame-corner {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                border: 2px solid $nara-gold;
+
+                &.top-left {
+                    top: -2px;
+                    left: -2px;
+                    border-right: none;
+                    border-bottom: none;
+                    border-radius: 15px 0 0 0;
+                }
+
+                &.top-right {
+                    top: -2px;
+                    right: -2px;
+                    border-left: none;
+                    border-bottom: none;
+                    border-radius: 0 15px 0 0;
+                }
+
+                &.bottom-left {
+                    bottom: -2px;
+                    left: -2px;
+                    border-right: none;
+                    border-top: none;
+                    border-radius: 0 0 0 15px;
+                }
+
+                &.bottom-right {
+                    bottom: -2px;
+                    right: -2px;
+                    border-left: none;
+                    border-top: none;
+                    border-radius: 0 0 15px 0;
+                }
+            }
+        }
+
+        .photo-placeholder {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: linear-gradient(145deg, rgba(74, 20, 140, 0.2), rgba(26, 35, 126, 0.2));
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: $nara-silver;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: linear-gradient(145deg, rgba(74, 20, 140, 0.4), rgba(26, 35, 126, 0.4));
+                transform: scale(1.02);
+            }
+
+            .photo-icon {
+                font-size: 4rem;
+                margin-bottom: 15px;
+                opacity: 0.7;
+            }
+
+            p {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+                font-weight: 500;
+            }
+
+            small {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    .photo-description {
+        text-align: center;
+
+        h3 {
+            color: $nara-gold;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        p {
+            color: $nara-silver;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    }
+}
+
+// Section histoire
+.story-section {
+    padding: 80px 20px;
+    background: rgba(26, 35, 126, 0.2);
+
+    .section-title {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 60px;
+        color: $nara-gold;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+
+        @media (max-width: 768px) {
+            font-size: 2.5rem;
+        }
+    }
+
+    .story-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 60px;
+        align-items: start;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
+
+    .story-content {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 40px;
+        border-radius: 20px;
+        border: 2px solid $nara-purple;
+        backdrop-filter: blur(10px);
+
+        h3 {
+            color: $nara-gold;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        p {
+            color: $nara-silver;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: justify;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .story-decoration {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .shadow-scroll {
+            width: 120px;
+            height: 300px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(74, 20, 140, 0.6));
+            border-radius: 60px;
+            border: 3px solid $nara-gold;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 20px;
+                background: linear-gradient(90deg, $nara-gold, $nara-silver);
+                border-radius: 60px 60px 0 0;
+            }
+
+            .scroll-content {
+                position: absolute;
+                top: 40px;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+                animation: scrollFloat 6s ease-in-out infinite;
+
+                span {
+                    font-size: 2rem;
+                    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+                }
+            }
+        }
+    }
+}
+
+// Ombres flottantes animées
+.floating-shadows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+
+    .shadow-orb {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: shadowFloat 8s ease-in-out infinite;
+        filter: blur(2px);
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(74, 20, 140, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+    }
+}
+
+// Section des techniques d'ombres
+.shadow-techniques {
+    padding: 80px 20px;
+    background: rgba(0, 0, 0, 0.8);
+
+    .section-title {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 60px;
+        color: $nara-gold;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+
+        @media (max-width: 768px) {
+            font-size: 2.5rem;
+        }
+    }
+
+    .techniques-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+
+    .technique-card {
+        background: linear-gradient(145deg, rgba(74, 20, 140, 0.3), rgba(26, 35, 126, 0.3));
+        padding: 40px 30px;
+        border-radius: 20px;
+        border: 2px solid $nara-purple;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(10px);
+
+        &:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: $nara-gold;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+
+            .shadow-effect {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        .technique-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        .technique-name {
+            color: $nara-gold;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .technique-description {
+            color: $nara-silver;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .shadow-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
+            opacity: 0;
+            transition: all 0.4s ease;
+            pointer-events: none;
+        }
+    }
+}
+
+// Section des caractéristiques du clan
+.clan-features {
+    padding: 80px 20px;
+    background: rgba(26, 35, 126, 0.3);
+
+    .section-title {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 60px;
+        color: $nara-gold;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+
+        @media (max-width: 768px) {
+            font-size: 2.5rem;
+        }
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+
+    .feature-card {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 40px 30px;
+        border-radius: 20px;
+        border: 2px solid $nara-blue;
+        text-align: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+
+        &:hover {
+            transform: translateY(-5px);
+            border-color: $nara-gold;
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+        }
+
+        .feature-title {
+            color: $nara-gold;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: $nara-silver;
+            line-height: 1.6;
+            margin: 0;
+        }
+    }
+}
+
+// Section CTA
+.cta-section {
+    text-align: center;
+    padding: 80px 20px;
+    background: rgba(0, 0, 0, 0.9);
+
+    h2 {
+        color: $nara-gold;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+
+        @media (max-width: 768px) {
+            font-size: 2.5rem;
+        }
+    }
+
+    p {
+        color: $nara-silver;
+        font-size: 1.3rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .nara-button {
+        position: relative;
+        background: linear-gradient(45deg, $nara-purple, $nara-blue);
+        color: white;
+        border: none;
+        padding: 18px 50px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        overflow: hidden;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(74, 20, 140, 0.4);
+
+            .button-shadow {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        .button-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+    }
+}
+
+// Animations pour le logo Nara
+@keyframes symbolRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        opacity: 0.2;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+@keyframes scrollFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes shadowFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateY(-30px) rotate(180deg);
+        opacity: 0.8;
+    }
+}
+
+// Effets de particules d'ombres
+.nara-clan-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 25% 25%, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, rgba(74, 20, 140, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: particleMove 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes particleMove {
+    0% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(-50px);
+    }
+}

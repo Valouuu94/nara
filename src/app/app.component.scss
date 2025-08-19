@@ -1,0 +1,30 @@
+.main-content {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image:
+            radial-gradient(circle at 10% 20%, rgba(74, 20, 140, 0.05) 1px, transparent 1px),
+            radial-gradient(circle at 90% 80%, rgba(26, 35, 126, 0.05) 1px, transparent 1px);
+        background-size: 100px 100px;
+        animation: backgroundParticles 25s linear infinite;
+        pointer-events: none;
+    }
+}
+
+@keyframes backgroundParticles {
+    0% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(-100px);
+    }
+}
