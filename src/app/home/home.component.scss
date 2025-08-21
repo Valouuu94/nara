@@ -1,649 +1,782 @@
-// Variables du clan Nara
-$nara-dark: #0a0a0a;
-$nara-purple: #4a148c;
-$nara-blue: #1a237e;
-$nara-shadow: #1a1a1a;
-$nara-gold: #ffd700;
-$nara-silver: #c0c0c0;
+// Variables du style manga authentique
+$manga-black: #000000;
+$manga-white: #ffffff;
+$manga-dark-gray: #1a1a1a;
+$manga-gray: #333333;
+$manga-light-gray: #666666;
+$manga-paper: #f8f8f8;
+$manga-ink: #000000;
+$manga-accent: #ff6b35;
 
-.nara-clan-container {
-    background: linear-gradient(135deg, $nara-dark 0%, $nara-purple 50%, $nara-blue 100%);
+// Couleurs pour les pièces Shogi
+$shogi-wood: #D2B48C;
+$shogi-black-piece: #2d2d2d;
+$shogi-white-piece: #f5f5dc;
+$shogi-border: #8B4513;
+
+// Container principal style planche manga
+.manga-page-container {
     min-height: 100vh;
-    color: white;
+    background: $manga-paper;
+    color: $manga-ink;
+    font-family: 'Comic Neue', 'Bangers', cursive, sans-serif;
     position: relative;
     overflow: hidden;
-}
 
-// Section héro avec logo du clan Nara
-.hero-section {
-    position: relative;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: radial-gradient(circle at center, rgba(74, 20, 140, 0.3) 0%, rgba(10, 10, 10, 0.9) 100%);
-
-    .shadow-overlay {
-        position: absolute;
+    // Texture de papier manga
+    &::before {
+        content: '';
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background:
-            radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.8) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(74, 20, 140, 0.6) 0%, transparent 50%);
+        background-image:
+            // Grain de papier
+            radial-gradient(circle at 25% 25%, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+            // Lignes de papier
+            repeating-linear-gradient(0deg,
+                transparent,
+                transparent 20px,
+                rgba(0, 0, 0, 0.01) 20px,
+                rgba(0, 0, 0, 0.01) 21px);
+        background-size: 30px 30px, 40px 40px, 100% 100%;
         pointer-events: none;
+        opacity: 0.8;
+    }
+}
+
+// En-tête manga avec style planche
+.manga-header {
+    background: $manga-black;
+    color: $manga-white;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    border-bottom: 4px solid $manga-ink;
+
+    // Effet de bordure manga
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 8px;
+        background: repeating-linear-gradient(90deg,
+                $manga-black 0px,
+                $manga-black 8px,
+                transparent 8px,
+                transparent 16px);
     }
 
-    .hero-content {
-        position: relative;
-        z-index: 2;
+    .title-container {
         max-width: 800px;
-        padding: 40px;
+        margin: 0 auto;
 
-        .clan-logo {
-            margin-bottom: 30px;
-
-            .logo-container {
-                position: relative;
-                width: 250px;
-                height: 250px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                .nara-symbol {
-                    width: 200px;
-                    height: 200px;
-                    object-fit: contain;
-                    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
-                    animation: symbolRotate 20s linear infinite;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        transform: scale(1.1);
-                        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
-                    }
-                }
-
-                .logo-glow {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 220px;
-                    height: 220px;
-                    background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
-                    border-radius: 50%;
-                    animation: glowPulse 3s ease-in-out infinite alternate;
-                    pointer-events: none;
-                }
-            }
-        }
-
-        .clan-title {
+        .manga-title {
             font-size: 4.5rem;
             font-weight: 900;
+            color: $manga-white;
+            text-shadow:
+                4px 4px 0px $manga-black,
+                8px 8px 0px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
-            background: linear-gradient(45deg, $nara-gold, $nara-silver);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-family: 'Bangers', cursive;
 
             @media (max-width: 768px) {
                 font-size: 3rem;
+                letter-spacing: 2px;
             }
         }
 
-        .clan-motto {
-            font-size: 1.5rem;
-            color: $nara-silver;
-            margin-bottom: 40px;
-            font-style: italic;
-            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
-        }
-
-        .shikamaru-quote {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid $nara-purple;
-            backdrop-filter: blur(10px);
-
-            p {
-                font-size: 1.3rem;
-                margin-bottom: 15px;
-                color: $nara-silver;
-            }
-
-            .quote-author {
-                color: $nara-gold;
-                font-weight: 600;
-                font-size: 1.1rem;
-            }
-        }
-    }
-}
-
-// Section photo avec cadre
-.photo-section {
-    padding: 80px 20px;
-    background: rgba(0, 0, 0, 0.6);
-
-    .photo-container {
-        max-width: 1000px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 60px;
-        align-items: center;
-
-        @media (max-width: 768px) {
-            grid-template-columns: 1fr;
-            gap: 40px;
-        }
-    }
-
-    .photo-frame {
-        position: relative;
-        width: 400px;
-        height: 300px;
-        margin: 0 auto;
-
-        .frame-border {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 3px solid $nara-gold;
-            border-radius: 15px;
-            box-shadow:
-                0 0 30px rgba(255, 215, 0, 0.3),
-                inset 0 0 20px rgba(0, 0, 0, 0.5);
-
-            .frame-corner {
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                border: 2px solid $nara-gold;
-
-                &.top-left {
-                    top: -2px;
-                    left: -2px;
-                    border-right: none;
-                    border-bottom: none;
-                    border-radius: 15px 0 0 0;
-                }
-
-                &.top-right {
-                    top: -2px;
-                    right: -2px;
-                    border-left: none;
-                    border-bottom: none;
-                    border-radius: 0 15px 0 0;
-                }
-
-                &.bottom-left {
-                    bottom: -2px;
-                    left: -2px;
-                    border-right: none;
-                    border-top: none;
-                    border-radius: 0 0 0 15px;
-                }
-
-                &.bottom-right {
-                    bottom: -2px;
-                    right: -2px;
-                    border-left: none;
-                    border-top: none;
-                    border-radius: 0 0 15px 0;
-                }
-            }
-        }
-
-        .photo-placeholder {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            background: linear-gradient(145deg, rgba(74, 20, 140, 0.2), rgba(26, 35, 126, 0.2));
-            border-radius: 10px;
+        .title-decoration {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: $nara-silver;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            gap: 30px;
+            margin-bottom: 25px;
 
-            &:hover {
-                background: linear-gradient(145deg, rgba(74, 20, 140, 0.4), rgba(26, 35, 126, 0.4));
-                transform: scale(1.02);
+            .decoration-line {
+                width: 120px;
+                height: 4px;
+                background: $manga-white;
+                border-radius: 2px;
+                box-shadow: 2px 2px 0px $manga-black;
+
+                @media (max-width: 768px) {
+                    width: 80px;
+                }
             }
 
-            .photo-icon {
-                font-size: 4rem;
-                margin-bottom: 15px;
-                opacity: 0.7;
-            }
-
-            p {
-                font-size: 1.2rem;
-                margin-bottom: 10px;
-                font-weight: 500;
-            }
-
-            small {
-                font-size: 0.9rem;
-                opacity: 0.8;
+            .decoration-symbol {
+                font-size: 2.5rem;
+                color: $manga-white;
+                text-shadow: 2px 2px 0px $manga-black;
+                animation: symbolBounce 2s ease-in-out infinite alternate;
             }
         }
-    }
 
-    .photo-description {
-        text-align: center;
-
-        h3 {
-            color: $nara-gold;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-
-        p {
-            color: $nara-silver;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            max-width: 400px;
-            margin: 0 auto;
+        .manga-subtitle {
+            font-size: 1.8rem;
+            color: $manga-white;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px $manga-black;
         }
     }
 }
 
-// Section histoire
-.story-section {
-    padding: 80px 20px;
-    background: rgba(26, 35, 126, 0.2);
+// Contenu principal avec layout planche manga
+.manga-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
 
-    .section-title {
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+}
+
+// Panneaux style planche manga
+.manga-panel {
+    background: $manga-white;
+    border: 4px solid $manga-black;
+    border-radius: 0;
+    padding: 30px;
+    position: relative;
+    box-shadow:
+        8px 8px 0px rgba(0, 0, 0, 0.8),
+        inset 0 0 0 2px $manga-black;
+
+    // Effet de coin manga cassé
+    &::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: $manga-black;
+        z-index: -1;
+        transform: rotate(1deg);
+    }
+
+    .panel-title {
+        color: $manga-black;
+        font-size: 2rem;
+        margin-bottom: 25px;
         text-align: center;
-        font-size: 3rem;
-        margin-bottom: 60px;
-        color: $nara-gold;
-        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-bottom: 3px solid $manga-black;
+        padding-bottom: 15px;
+        position: relative;
 
-        @media (max-width: 768px) {
-            font-size: 2.5rem;
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: $manga-accent;
         }
     }
+}
 
-    .story-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 60px;
-        align-items: start;
+// Panneau gauche - Logo et présentation
+.left-panel {
+    .clan-logo-section {
+        text-align: center;
 
-        @media (max-width: 768px) {
-            grid-template-columns: 1fr;
-            gap: 40px;
+        .logo-container {
+            position: relative;
+            margin-bottom: 35px;
+
+            .nara-symbol-manga {
+                width: 180px;
+                height: 180px;
+                object-fit: contain;
+                filter: contrast(1.2) brightness(0.9);
+                animation: logoFloat 4s ease-in-out infinite;
+                border: 3px solid $manga-black;
+                background: $manga-white;
+                padding: 10px;
+                border-radius: 0;
+            }
+
+            .logo-aura {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 220px;
+                height: 220px;
+                border: 2px dashed $manga-black;
+                border-radius: 0;
+                animation: auraRotate 10s linear infinite;
+                pointer-events: none;
+                opacity: 0.6;
+            }
+        }
+
+        .clan-intro {
+            .manga-text {
+                color: $manga-black;
+                font-size: 1.1rem;
+                line-height: 1.7;
+                text-align: justify;
+                font-weight: 500;
+            }
         }
     }
+}
 
-    .story-content {
-        background: rgba(0, 0, 0, 0.7);
-        padding: 40px;
-        border-radius: 20px;
-        border: 2px solid $nara-purple;
-        backdrop-filter: blur(10px);
+// Panneau central - Échiquier Shogi
+.center-panel {
+    .shogi-section {
+        .shogi-board-container {
+            .shogi-board {
+                .board-grid {
+                    display: grid;
+                    grid-template-columns: repeat(9, 1fr);
+                    gap: 1px;
+                    background: $shogi-border;
+                    border: 3px solid $shogi-border;
+                    padding: 1px;
+                    margin-bottom: 20px;
 
-        h3 {
-            color: $nara-gold;
-            font-size: 2rem;
-            margin-bottom: 25px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+                    .board-row {
+                        display: contents;
+
+                        .board-cell {
+                            width: 40px;
+                            height: 40px;
+                            background: $shogi-wood;
+                            border: 1px solid $shogi-border;
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+
+                            &:hover {
+                                background: lighten($shogi-wood, 5%);
+                                border-color: darken($shogi-border, 10%);
+                            }
+
+                            &.highlighted {
+                                background: rgba(255, 107, 53, 0.3);
+                                border-color: $manga-accent;
+                                border-width: 2px;
+                                box-shadow: inset 0 0 10px rgba(255, 107, 53, 0.5);
+                            }
+
+                            &.valid-move {
+                                background: rgba(0, 255, 0, 0.2);
+                                border-color: #00aa00;
+                                border-width: 2px;
+                                box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+
+                                &:hover {
+                                    background: rgba(0, 255, 0, 0.4);
+                                }
+                            }
+
+                            &.drag-over {
+                                background: rgba(0, 150, 255, 0.3);
+                                border-color: #0096ff;
+                                border-width: 3px;
+                                box-shadow:
+                                    inset 0 0 15px rgba(0, 150, 255, 0.5),
+                                    0 0 10px rgba(0, 150, 255, 0.8);
+                                transform: scale(1.05);
+                            }
+
+                            // Points de promotion
+                            .promotion-dot {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 4px;
+                                height: 4px;
+                                background: $manga-black;
+                                border-radius: 50%;
+                                opacity: 0.6;
+                            }
+                        }
+                    }
+                }
+
+                // Légende des pièces
+                .piece-legend {
+                    margin-top: 20px;
+                    padding: 15px;
+                    background: rgba(0, 0, 0, 0.05);
+                    border: 2px solid $manga-black;
+
+                    h4 {
+                        color: $manga-black;
+                        font-size: 1.1rem;
+                        margin-bottom: 15px;
+                        font-weight: 700;
+                        text-align: center;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                    }
+
+                    .legend-items {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 10px;
+
+                        .legend-item {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 5px;
+
+                            .legend-kanji {
+                                font-size: 1.2rem;
+                                font-weight: 700;
+                                color: $manga-black;
+                            }
+
+                            .legend-name {
+                                font-size: 0.7rem;
+                                color: $manga-gray;
+                                text-align: center;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Instructions
+            .shogi-instructions {
+                margin-top: 20px;
+                padding: 15px;
+                background: rgba(255, 107, 53, 0.1);
+                border: 2px solid $manga-accent;
+
+                p {
+                    color: $manga-black;
+                    font-size: 0.9rem;
+                    margin: 5px 0;
+                    font-weight: 500;
+
+                    strong {
+                        color: $manga-accent;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Pièces de Shogi avec couleurs différentes
+.shogi-piece {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $shogi-border;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
+
+    &.white-piece {
+        background: linear-gradient(135deg, $shogi-white-piece 0%, lighten($shogi-white-piece, 5%) 50%, $shogi-white-piece 100%);
+        border-color: darken($shogi-white-piece, 20%);
+        color: $manga-black;
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+        &:hover {
+            background: linear-gradient(135deg, lighten($shogi-white-piece, 3%) 0%, lighten($shogi-white-piece, 8%) 50%, lighten($shogi-white-piece, 3%) 100%);
+            transform: scale(1.05);
+            box-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
-        p {
-            color: $nara-silver;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            text-align: justify;
+        &[draggable="true"] {
+            cursor: grab;
 
-            &:last-child {
-                margin-bottom: 0;
+            &:active {
+                cursor: grabbing;
             }
         }
     }
 
-    .story-decoration {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    &.black-piece {
+        background: linear-gradient(135deg, $shogi-black-piece 0%, lighten($shogi-black-piece, 10%) 50%, $shogi-black-piece 100%);
+        border-color: lighten($shogi-black-piece, 30%);
+        color: $manga-white;
+        transform: rotate(180deg);
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
-        .shadow-scroll {
-            width: 120px;
-            height: 300px;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(74, 20, 140, 0.6));
-            border-radius: 60px;
-            border: 3px solid $nara-gold;
+        &:hover {
+            background: linear-gradient(135deg, lighten($shogi-black-piece, 5%) 0%, lighten($shogi-black-piece, 15%) 50%, lighten($shogi-black-piece, 5%) 100%);
+            transform: rotate(180deg) scale(1.05);
+            box-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    &.selected {
+        background: linear-gradient(135deg, $manga-accent 0%, lighten($manga-accent, 10%) 50%, $manga-accent 100%);
+        color: $manga-white;
+        border-color: darken($manga-accent, 20%);
+        transform: scale(1.1);
+        box-shadow:
+            0 6px 12px rgba(255, 107, 53, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        z-index: 10;
+
+        .piece-kanji {
+            color: $manga-white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    &.dragging {
+        opacity: 0.7;
+        transform: scale(1.2) rotate(5deg);
+        box-shadow:
+            0 8px 16px rgba(0, 0, 0, 0.4),
+            0 0 20px rgba(255, 107, 53, 0.6);
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .piece-kanji {
+        font-size: 1.4rem;
+        font-weight: 900;
+        font-family: 'Noto Sans JP', sans-serif;
+        text-shadow:
+            1px 1px 0px rgba(255, 255, 255, 0.8),
+            0 0 3px rgba(0, 0, 0, 0.2);
+        user-select: none;
+        pointer-events: none;
+    }
+}
+
+// Panneau droit - Photo et histoire
+.right-panel {
+    .photo-story-section {
+        .manga-photo-frame {
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            width: 100%;
+            height: 220px;
+            margin-bottom: 35px;
 
-            &::before {
-                content: '';
+            .frame-border-manga {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 20px;
-                background: linear-gradient(90deg, $nara-gold, $nara-silver);
-                border-radius: 60px 60px 0 0;
+                bottom: 0;
+                border: 4px solid $manga-black;
+                border-radius: 0;
+                background: $manga-white;
+                box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.8);
+
+                .corner-decoration {
+                    position: absolute;
+                    width: 25px;
+                    height: 25px;
+                    border: 3px solid $manga-black;
+
+                    &.top-left {
+                        top: -3px;
+                        left: -3px;
+                        border-right: none;
+                        border-bottom: none;
+                        border-radius: 0;
+                    }
+
+                    &.top-right {
+                        top: -3px;
+                        right: -3px;
+                        border-left: none;
+                        border-bottom: none;
+                        border-radius: 0;
+                    }
+
+                    &.bottom-left {
+                        bottom: -3px;
+                        left: -3px;
+                        border-right: none;
+                        border-top: none;
+                        border-radius: 0;
+                    }
+
+                    &.bottom-right {
+                        bottom: -3px;
+                        right: -3px;
+                        border-left: none;
+                        border-top: none;
+                        border-radius: 0;
+                    }
+                }
             }
 
-            .scroll-content {
+            .photo-content {
                 position: absolute;
-                top: 40px;
-                left: 0;
-                right: 0;
+                top: 25px;
+                left: 25px;
+                right: 25px;
+                bottom: 25px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 40px;
-                animation: scrollFloat 6s ease-in-out infinite;
+                justify-content: center;
+                color: $manga-black;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 2px dashed $manga-gray;
 
-                span {
-                    font-size: 2rem;
-                    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+                &:hover {
+                    transform: scale(1.02);
+                    border-color: $manga-black;
+                    background: rgba(0, 0, 0, 0.02);
                 }
+
+                .camera-icon {
+                    font-size: 3.5rem;
+                    margin-bottom: 20px;
+                    opacity: 0.7;
+                }
+
+                .photo-text {
+                    font-size: 1.2rem;
+                    margin-bottom: 10px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                .photo-hint {
+                    font-size: 0.9rem;
+                    opacity: 0.8;
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .clan-story {
+            .story-title {
+                color: $manga-black;
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                border-bottom: 2px solid $manga-black;
+                padding-bottom: 10px;
+            }
+
+            .story-text {
+                color: $manga-black;
+                font-size: 1rem;
+                line-height: 1.6;
+                text-align: justify;
+                font-weight: 500;
             }
         }
     }
 }
 
-// Ombres flottantes animées
-.floating-shadows {
-    position: absolute;
+// Section basse avec caractéristiques
+.manga-bottom-section {
+    padding: 80px 20px;
+    background: $manga-black;
+    color: $manga-white;
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        .feature-item {
+            background: $manga-white;
+            color: $manga-black;
+            border: 4px solid $manga-black;
+            border-radius: 0;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8);
+
+            // Effet de coin cassé
+            &::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: $manga-black;
+                z-index: -1;
+                transform: rotate(1deg);
+            }
+
+            &:hover {
+                transform: translateY(-8px);
+                box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.8);
+            }
+
+            .feature-icon {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+                color: $manga-black;
+            }
+
+            .feature-title {
+                color: $manga-black;
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .feature-desc {
+                color: $manga-black;
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin: 0;
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+// Footer manga avec CTA
+.manga-footer {
+    padding: 80px 20px;
+    text-align: center;
+    background: $manga-black;
+    color: $manga-white;
+
+    .cta-container {
+        .cta-title {
+            color: $manga-white;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        .manga-button {
+            position: relative;
+            background: $manga-white;
+            color: $manga-black;
+            border: 4px solid $manga-black;
+            padding: 25px 60px;
+            font-size: 1.4rem;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            overflow: hidden;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8);
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.8);
+                background: $manga-accent;
+                color: $manga-white;
+            }
+
+            &:active {
+                transform: translateY(0);
+                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+            }
+
+            .button-text {
+                position: relative;
+                z-index: 2;
+            }
+
+            .button-effect {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: $manga-accent;
+                opacity: 0;
+                transition: all 0.3s ease;
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+// Éléments de décoration manga flottants
+.manga-decorations {
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     pointer-events: none;
+    z-index: 1;
 
-    .shadow-orb {
+    .floating-element {
         position: absolute;
-        width: 100px;
-        height: 100px;
-        background: radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, transparent 70%);
-        border-radius: 50%;
-        animation: shadowFloat 8s ease-in-out infinite;
-        filter: blur(2px);
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, rgba(74, 20, 140, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-    }
-}
-
-// Section des techniques d'ombres
-.shadow-techniques {
-    padding: 80px 20px;
-    background: rgba(0, 0, 0, 0.8);
-
-    .section-title {
-        text-align: center;
-        font-size: 3rem;
-        margin-bottom: 60px;
-        color: $nara-gold;
-        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-
-        @media (max-width: 768px) {
-            font-size: 2.5rem;
-        }
-    }
-
-    .techniques-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
-
-        @media (max-width: 768px) {
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-    }
-
-    .technique-card {
-        background: linear-gradient(145deg, rgba(74, 20, 140, 0.3), rgba(26, 35, 126, 0.3));
-        padding: 40px 30px;
-        border-radius: 20px;
-        border: 2px solid $nara-purple;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        backdrop-filter: blur(10px);
+        font-size: 2.5rem;
+        color: $manga-black;
+        opacity: 0.3;
+        animation: mangaFloat 10s ease-in-out infinite;
 
         &:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: $nara-gold;
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
-
-            .shadow-effect {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-        }
-
-        .technique-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
-        }
-
-        .technique-name {
-            color: $nara-gold;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .technique-description {
-            color: $nara-silver;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .shadow-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
-            opacity: 0;
-            transition: all 0.4s ease;
-            pointer-events: none;
+            opacity: 0.6;
+            transform: scale(1.3);
         }
     }
 }
 
-// Section des caractéristiques du clan
-.clan-features {
-    padding: 80px 20px;
-    background: rgba(26, 35, 126, 0.3);
-
-    .section-title {
-        text-align: center;
-        font-size: 3rem;
-        margin-bottom: 60px;
-        color: $nara-gold;
-        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-
-        @media (max-width: 768px) {
-            font-size: 2.5rem;
-        }
-    }
-
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
-
-        @media (max-width: 768px) {
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-    }
-
-    .feature-card {
-        background: rgba(0, 0, 0, 0.7);
-        padding: 40px 30px;
-        border-radius: 20px;
-        border: 2px solid $nara-blue;
-        text-align: center;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-
-        &:hover {
-            transform: translateY(-5px);
-            border-color: $nara-gold;
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
-        }
-
-        .feature-title {
-            color: $nara-gold;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .feature-description {
-            color: $nara-silver;
-            line-height: 1.6;
-            margin: 0;
-        }
-    }
-}
-
-// Section CTA
-.cta-section {
-    text-align: center;
-    padding: 80px 20px;
-    background: rgba(0, 0, 0, 0.9);
-
-    h2 {
-        color: $nara-gold;
-        font-size: 3rem;
-        margin-bottom: 20px;
-        font-weight: 600;
-        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-
-        @media (max-width: 768px) {
-            font-size: 2.5rem;
-        }
-    }
-
-    p {
-        color: $nara-silver;
-        font-size: 1.3rem;
-        margin-bottom: 40px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .nara-button {
-        position: relative;
-        background: linear-gradient(45deg, $nara-purple, $nara-blue);
-        color: white;
-        border: none;
-        padding: 18px 50px;
-        font-size: 1.2rem;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        overflow: hidden;
-
-        &:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(74, 20, 140, 0.4);
-
-            .button-shadow {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
-        }
-
-        &:active {
-            transform: translateY(0);
-        }
-
-        .button-shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, transparent 70%);
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-    }
-}
-
-// Animations pour le logo Nara
-@keyframes symbolRotate {
+// Animations manga authentiques
+@keyframes symbolBounce {
     0% {
-        transform: rotate(0deg);
+        transform: translateY(0px);
     }
 
     100% {
-        transform: rotate(360deg);
+        transform: translateY(-10px);
     }
 }
 
-@keyframes glowPulse {
-    0% {
-        opacity: 0.2;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    100% {
-        opacity: 0.4;
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-}
-
-@keyframes scrollFloat {
+@keyframes logoFloat {
 
     0%,
     100% {
@@ -651,11 +784,21 @@ $nara-silver: #c0c0c0;
     }
 
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-8px);
     }
 }
 
-@keyframes shadowFloat {
+@keyframes auraRotate {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes mangaFloat {
 
     0%,
     100% {
@@ -664,33 +807,43 @@ $nara-silver: #c0c0c0;
     }
 
     50% {
-        transform: translateY(-30px) rotate(180deg);
-        opacity: 0.8;
+        transform: translateY(-15px) rotate(3deg);
+        opacity: 0.6;
     }
 }
 
-// Effets de particules d'ombres
-.nara-clan-container::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-        radial-gradient(circle at 25% 25%, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-        radial-gradient(circle at 75% 75%, rgba(74, 20, 140, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: particleMove 20s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes particleMove {
-    0% {
-        transform: translateY(0px);
+// Responsive design
+@media (max-width: 768px) {
+    .manga-header .title-container .manga-title {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
     }
 
-    100% {
-        transform: translateY(-50px);
+    .manga-content {
+        padding: 40px 15px;
+    }
+
+    .manga-panel {
+        padding: 25px;
+    }
+
+    .manga-footer .cta-container .cta-title {
+        font-size: 2.5rem;
+    }
+
+    // Responsive pour l'échiquier Shogi
+    .center-panel .shogi-section .shogi-board-container .shogi-board .board-grid {
+        .board-row .board-cell {
+            width: 30px;
+            height: 30px;
+
+            .shogi-piece .piece-kanji {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .center-panel .shogi-section .shogi-board-container .shogi-board .piece-legend .legend-items {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

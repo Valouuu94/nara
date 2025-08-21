@@ -1,150 +1,230 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+interface ShogiPiece {
+    type: string;
+    color: 'white' | 'black';
+    position: { row: number; col: number };
+    kanji: string;
+    canMove: boolean;
+}
 
 @Component({
     selector: 'app-home',
     standalone: true,
+    imports: [CommonModule],
     template: `
-    <div class="nara-clan-container">
-      <!-- Section héro avec logo du clan Nara -->
-      <section class="hero-section">
-        <div class="shadow-overlay"></div>
-        <div class="hero-content">
-          <div class="clan-logo">
+    <div class="manga-page-container">
+      <!-- En-tête manga avec titre stylisé -->
+      <header class="manga-header">
+        <div class="title-container">
+          <h1 class="manga-title">L'ÉVEIL DES OMBRES</h1>
+          <div class="title-decoration">
+            <span class="decoration-line"></span>
+            <span class="decoration-symbol">🌑</span>
+            <span class="decoration-line"></span>
+          </div>
+          <h2 class="manga-subtitle">CLAN NARA - LA SAGESSE DANS LES TÉNÈBRES</h2>
+        </div>
+      </header>
+
+      <!-- Section principale avec layout manga -->
+      <main class="manga-content">
+        <!-- Panneau gauche - Logo et présentation -->
+        <div class="manga-panel left-panel">
+          <div class="clan-logo-section">
             <div class="logo-container">
-              <img src="assets/Nara_Symbol.png" alt="Symbole du Clan Nara" class="nara-symbol">
-              <div class="logo-glow"></div>
+              <img src="assets/Nara_Symbol.png" alt="Symbole du Clan Nara" class="nara-symbol-manga">
+              <div class="logo-aura"></div>
+            </div>
+            <div class="clan-intro">
+              <h3 class="panel-title">Le Clan Nara</h3>
+              <p class="manga-text">Gardiens des ombres ancestrales, maîtres de la stratégie et de la sagesse. Leur pouvoir réside dans la manipulation des ténèbres pour protéger la lumière.</p>
             </div>
           </div>
-          <h1 class="clan-title">Clan Nara</h1>
-          <p class="clan-motto">"L'ombre suit la lumière, la sagesse suit l'ombre"</p>
-          <div class="shikamaru-quote">
-            <p>"Quel ennui... Mais c'est mon devoir de protéger le village."</p>
-            <span class="quote-author">- Shikamaru Nara</span>
-          </div>
         </div>
-        <div class="floating-shadows">
-          <div class="shadow-orb" *ngFor="let shadow of shadowOrbs; let i = index" 
-               [style.animation-delay]="shadow.delay"
-               [style.left]="shadow.left"
-               [style.top]="shadow.top"></div>
-        </div>
-      </section>
 
-      <!-- Section photo avec cadre -->
-      <section class="photo-section">
-        <div class="photo-container">
-          <div class="photo-frame">
-            <div class="frame-border">
-              <div class="frame-corner top-left"></div>
-              <div class="frame-corner top-right"></div>
-              <div class="frame-corner bottom-left"></div>
-              <div class="frame-corner bottom-right"></div>
-            </div>
-            <div class="photo-placeholder">
-              <div class="photo-icon">📷</div>
-              <p>Votre photo ici</p>
-              <small>Cliquez pour ajouter une image</small>
-            </div>
-          </div>
-          <div class="photo-description">
-            <h3>Mémoire du Clan</h3>
-            <p>Capturez un moment spécial de votre histoire avec le clan Nara</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section histoire -->
-      <section class="story-section">
-        <h2 class="section-title">L'Histoire du Clan</h2>
-        <div class="story-container">
-          <div class="story-content">
-            <h3>La Légende des Nara</h3>
-            <p>Dans les temps anciens, au cœur de la forêt sacrée de Konoha, vivait un clan mystérieux dont la sagesse était aussi profonde que les ombres qu'ils manipulaient. Les Nara, gardiens des secrets ancestraux, maîtrisaient l'art de contrôler les ténèbres pour protéger la lumière.</p>
-            
-            <p>Leur symbole, un cerf majestueux aux bois dorés, représentait la grâce et l'intelligence qui caractérisaient chaque membre du clan. De génération en génération, ils transmirent leur savoir, leurs techniques d'ombres et leur philosophie unique.</p>
-            
-            <p>Aujourd'hui, le clan Nara continue de briller dans l'obscurité, prouvant que même dans les moments les plus sombres, la sagesse et la stratégie peuvent triompher. Chaque ombre qu'ils manipulent raconte une histoire, chaque technique qu'ils maîtrisent honore leurs ancêtres.</p>
-          </div>
-          <div class="story-decoration">
-            <div class="shadow-scroll">
-              <div class="scroll-content">
-                <span>🦌</span>
-                <span>🌑</span>
-                <span>⚡</span>
-                <span>🧠</span>
+        <!-- Panneau central - Échiquier Shogi -->
+        <div class="manga-panel center-panel">
+          <div class="shogi-section">
+            <h3 class="panel-title">Stratégie du Clan</h3>
+            <div class="shogi-board-container">
+              <div class="shogi-board">
+                <div class="board-grid">
+                  <div class="board-row" *ngFor="let row of boardRows; let rowIndex = index">
+                    <div class="board-cell" 
+                         *ngFor="let col of boardCols; let colIndex = index"
+                         [class.highlighted]="isHighlighted(rowIndex, colIndex)"
+                         [class.valid-move]="isValidMove(rowIndex, colIndex)"
+                         [class.drag-over]="isDragOver(rowIndex, colIndex)"
+                         (click)="onCellClick(rowIndex, colIndex)"
+                         (dragover)="onDragOver($event, rowIndex, colIndex)"
+                         (dragleave)="onDragLeave($event)"
+                         (drop)="onDrop($event, rowIndex, colIndex)">
+                      
+                      <!-- Pièce de Shogi -->
+                      <div class="shogi-piece" 
+                           *ngIf="getPieceAt(rowIndex, colIndex)"
+                           [class.selected]="isSelected(rowIndex, colIndex)"
+                           [class.white-piece]="getPieceAt(rowIndex, colIndex)?.color === 'white'"
+                           [class.black-piece]="getPieceAt(rowIndex, colIndex)?.color === 'black'"
+                           [class.dragging]="isDragging(rowIndex, colIndex)"
+                           [draggable]="getPieceAt(rowIndex, colIndex)?.color === 'white'"
+                           (dragstart)="onDragStart($event, rowIndex, colIndex)"
+                           (dragend)="onDragEnd($event)"
+                           (click)="onPieceClick(rowIndex, colIndex, $event)">
+                        <span class="piece-kanji">{{ getPieceAt(rowIndex, colIndex)?.kanji }}</span>
+                      </div>
+                      
+                      <!-- Points de promotion -->
+                      <div class="promotion-dot" 
+                           *ngIf="isPromotionZone(rowIndex, colIndex)"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Légende des pièces -->
+                <div class="piece-legend">
+                  <h4>Pièces du Clan</h4>
+                  <div class="legend-items">
+                    <div class="legend-item" *ngFor="let piece of pieceTypes">
+                      <span class="legend-kanji">{{ piece.kanji }}</span>
+                      <span class="legend-name">{{ piece.name }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Instructions -->
+              <div class="shogi-instructions">
+                <p><strong>Instructions :</strong></p>
+                <p>• Glissez-déposez une pièce blanche pour la déplacer</p>
+                <p>• Ou cliquez sur une pièce puis sur une case vide</p>
+                <p>• Mouvement limité à 1 case maximum</p>
+                <p>• Seules les pièces blanches peuvent bouger</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- Section des techniques d'ombres -->
-      <section class="shadow-techniques">
-        <h2 class="section-title">Techniques du Clan Nara</h2>
-        <div class="techniques-grid">
-          <div class="technique-card" *ngFor="let technique of shadowTechniques">
-            <div class="technique-icon">{{ technique.icon }}</div>
-            <h3 class="technique-name">{{ technique.name }}</h3>
-            <p class="technique-description">{{ technique.description }}</p>
-            <div class="shadow-effect"></div>
+        <!-- Panneau droit - Photo et histoire -->
+        <div class="manga-panel right-panel">
+          <div class="photo-story-section">
+            <!-- Cadre photo style manga -->
+            <div class="manga-photo-frame">
+              <div class="frame-border-manga">
+                <div class="corner-decoration top-left"></div>
+                <div class="corner-decoration top-right"></div>
+                <div class="corner-decoration bottom-left"></div>
+                <div class="corner-decoration bottom-right"></div>
+              </div>
+              <div class="photo-content">
+                <div class="camera-icon">📷</div>
+                <p class="photo-text">Votre moment avec le clan</p>
+                <small class="photo-hint">Cliquez pour immortaliser</small>
+              </div>
+            </div>
+            
+            <!-- Histoire du clan -->
+            <div class="clan-story">
+              <h4 class="story-title">La Légende</h4>
+              <p class="story-text">Dans les temps anciens, au cœur de la forêt sacrée de Konoha, vivait un clan mystérieux dont la sagesse était aussi profonde que les ombres qu'ils manipulaient...</p>
+            </div>
           </div>
         </div>
-      </section>
+      </main>
 
-      <!-- Section des caractéristiques du clan -->
-      <section class="clan-features">
-        <h2 class="section-title">Héritage du Clan</h2>
+      <!-- Section basse avec caractéristiques -->
+      <section class="manga-bottom-section">
         <div class="features-grid">
-          <div class="feature-card" *ngFor="let feature of clanFeatures">
+          <div class="feature-item" *ngFor="let feature of clanFeatures">
             <div class="feature-icon">{{ feature.icon }}</div>
-            <h3 class="feature-title">{{ feature.title }}</h3>
-            <p class="feature-description">{{ feature.description }}</p>
+            <h4 class="feature-title">{{ feature.title }}</h4>
+            <p class="feature-desc">{{ feature.description }}</p>
           </div>
         </div>
       </section>
 
-      <!-- Section CTA -->
-      <section class="cta-section">
-        <h2>Prêt à rejoindre le clan ?</h2>
-        <p>Découvrez la puissance des ombres et la sagesse des Nara</p>
-        <button class="nara-button" (click)="enterClan()">
-          <span class="button-shadow"></span>
-          Entrer dans l'ombre
-        </button>
-      </section>
+      <!-- Call to action style manga -->
+      <footer class="manga-footer">
+        <div class="cta-container">
+          <h3 class="cta-title">Prêt à rejoindre le clan ?</h3>
+          <button class="manga-button" (click)="enterClan()">
+            <span class="button-text">ENTRER DANS L'OMBRE</span>
+            <div class="button-effect"></div>
+          </button>
+        </div>
+      </footer>
     </div>
   `,
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-    shadowOrbs = [
-        { delay: '0s', left: '10%', top: '20%' },
-        { delay: '2s', left: '80%', top: '30%' },
-        { delay: '4s', left: '20%', top: '70%' },
-        { delay: '6s', left: '70%', top: '80%' }
+    // Configuration de l'échiquier Shogi
+    boardRows = Array.from({ length: 9 }, (_, i) => i);
+    boardCols = Array.from({ length: 9 }, (_, i) => i);
+
+    selectedPiece: { row: number; col: number } | null = null;
+    draggedPiece: { row: number; col: number } | null = null;
+    dragOverCell: { row: number; col: number } | null = null;
+
+    // Types de pièces avec leurs kanji
+    pieceTypes = [
+        { kanji: '王', name: 'Roi' },
+        { kanji: '金', name: 'Général d\'Or' },
+        { kanji: '銀', name: 'Général d\'Argent' },
+        { kanji: '桂', name: 'Cavalier' },
+        { kanji: '香', name: 'Lance' },
+        { kanji: '飛', name: 'Tour' },
+        { kanji: '角', name: 'Fou' },
+        { kanji: '步', name: 'Pion' }
     ];
 
-    shadowTechniques = [
-        {
-            icon: '🌑',
-            name: 'Kagemane no Jutsu',
-            description: 'Contrôle des ombres pour manipuler les ennemis'
-        },
-        {
-            icon: '⚫',
-            name: 'Kage Nui',
-            description: 'Projectiles d\'ombres pour attaquer à distance'
-        },
-        {
-            icon: '🕳️',
-            name: 'Kage Kubishibari',
-            description: 'Étranglement par les ombres'
-        },
-        {
-            icon: '🌙',
-            name: 'Kage Yose',
-            description: 'Attraction des ombres pour capturer'
-        }
+    // Pièces sur l'échiquier (position initiale comme sur votre image)
+    shogiPieces: ShogiPiece[] = [
+        // Pièces blanches (en bas) - couleur claire
+        { type: '香', color: 'white', position: { row: 8, col: 0 }, kanji: '香', canMove: true },
+        { type: '桂', color: 'white', position: { row: 8, col: 1 }, kanji: '桂', canMove: true },
+        { type: '銀', color: 'white', position: { row: 8, col: 2 }, kanji: '銀', canMove: true },
+        { type: '金', color: 'white', position: { row: 8, col: 3 }, kanji: '金', canMove: true },
+        { type: '王', color: 'white', position: { row: 8, col: 4 }, kanji: '王', canMove: true },
+        { type: '金', color: 'white', position: { row: 8, col: 5 }, kanji: '金', canMove: true },
+        { type: '銀', color: 'white', position: { row: 8, col: 6 }, kanji: '銀', canMove: true },
+        { type: '桂', color: 'white', position: { row: 8, col: 7 }, kanji: '桂', canMove: true },
+        { type: '香', color: 'white', position: { row: 8, col: 8 }, kanji: '香', canMove: true },
+        { type: '角', color: 'white', position: { row: 7, col: 1 }, kanji: '角', canMove: true },
+        { type: '飛', color: 'white', position: { row: 7, col: 7 }, kanji: '飛', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 0 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 1 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 2 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 3 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 4 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 5 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 6 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 7 }, kanji: '步', canMove: true },
+        { type: '步', color: 'white', position: { row: 6, col: 8 }, kanji: '步', canMove: true },
+
+        // Pièces noires (en haut) - couleur foncée
+        { type: '香', color: 'black', position: { row: 0, col: 0 }, kanji: '香', canMove: false },
+        { type: '桂', color: 'black', position: { row: 0, col: 1 }, kanji: '桂', canMove: false },
+        { type: '銀', color: 'black', position: { row: 0, col: 2 }, kanji: '銀', canMove: false },
+        { type: '金', color: 'black', position: { row: 0, col: 3 }, kanji: '金', canMove: false },
+        { type: '王', color: 'black', position: { row: 0, col: 4 }, kanji: '王', canMove: false },
+        { type: '金', color: 'black', position: { row: 0, col: 5 }, kanji: '金', canMove: false },
+        { type: '銀', color: 'black', position: { row: 0, col: 6 }, kanji: '銀', canMove: false },
+        { type: '桂', color: 'black', position: { row: 0, col: 7 }, kanji: '桂', canMove: false },
+        { type: '香', color: 'black', position: { row: 0, col: 8 }, kanji: '香', canMove: false },
+        { type: '角', color: 'black', position: { row: 1, col: 7 }, kanji: '角', canMove: false },
+        { type: '飛', color: 'black', position: { row: 1, col: 1 }, kanji: '飛', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 0 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 1 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 2 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 3 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 4 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 5 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 6 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 7 }, kanji: '步', canMove: false },
+        { type: '步', color: 'black', position: { row: 2, col: 8 }, kanji: '步', canMove: false }
     ];
 
     clanFeatures = [
@@ -165,8 +245,129 @@ export class HomeComponent {
         }
     ];
 
+    // Méthodes pour l'échiquier Shogi
+    getPieceAt(row: number, col: number): ShogiPiece | undefined {
+        return this.shogiPieces.find(piece =>
+            piece.position.row === row && piece.position.col === col
+        );
+    }
+
+    isSelected(row: number, col: number): boolean {
+        return this.selectedPiece?.row === row && this.selectedPiece?.col === col;
+    }
+
+    isHighlighted(row: number, col: number): boolean {
+        return this.selectedPiece?.row === row && this.selectedPiece?.col === col;
+    }
+
+    isDragging(row: number, col: number): boolean {
+        return this.draggedPiece?.row === row && this.draggedPiece?.col === col;
+    }
+
+    isDragOver(row: number, col: number): boolean {
+        return this.dragOverCell?.row === row && this.dragOverCell?.col === col;
+    }
+
+    isValidMove(row: number, col: number): boolean {
+        if (!this.selectedPiece && !this.draggedPiece) return false;
+
+        const sourcePos = this.selectedPiece || this.draggedPiece;
+        if (!sourcePos) return false;
+
+        const piece = this.getPieceAt(sourcePos.row, sourcePos.col);
+        if (!piece || piece.color !== 'white') return false;
+
+        // Vérifier si la case de destination est vide
+        if (this.getPieceAt(row, col)) return false;
+
+        // Vérifier si le mouvement est d'une seule case
+        const rowDiff = Math.abs(row - sourcePos.row);
+        const colDiff = Math.abs(col - sourcePos.col);
+
+        // Mouvement d'une seule case (horizontale, verticale ou diagonale)
+        return (rowDiff === 1 && colDiff === 0) ||
+            (rowDiff === 0 && colDiff === 1) ||
+            (rowDiff === 1 && colDiff === 1);
+    }
+
+    isPromotionZone(row: number, col: number): boolean {
+        // Zones de promotion : 3 premières et 3 dernières rangées
+        return row <= 2 || row >= 6;
+    }
+
+    // Gestion du glisser-déposer
+    onDragStart(event: DragEvent, row: number, col: number): void {
+        const piece = this.getPieceAt(row, col);
+        if (piece && piece.color === 'white') {
+            this.draggedPiece = { row, col };
+            this.selectedPiece = null;
+
+            // Créer une image de drag personnalisée
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', `${row},${col}`);
+            }
+        } else {
+            event.preventDefault();
+        }
+    }
+
+    onDragOver(event: DragEvent, row: number, col: number): void {
+        if (this.isValidMove(row, col)) {
+            event.preventDefault();
+            event.dataTransfer!.dropEffect = 'move';
+            this.dragOverCell = { row, col };
+        }
+    }
+
+    onDragLeave(event: DragEvent): void {
+        this.dragOverCell = null;
+    }
+
+    onDrop(event: DragEvent, row: number, col: number): void {
+        event.preventDefault();
+
+        if (this.draggedPiece && this.isValidMove(row, col)) {
+            const piece = this.getPieceAt(this.draggedPiece.row, this.draggedPiece.col);
+            if (piece) {
+                piece.position = { row, col };
+            }
+        }
+
+        this.draggedPiece = null;
+        this.dragOverCell = null;
+    }
+
+    onDragEnd(event: DragEvent): void {
+        this.draggedPiece = null;
+        this.dragOverCell = null;
+    }
+
+    // Gestion des clics (méthode alternative)
+    onPieceClick(row: number, col: number, event: Event): void {
+        event.stopPropagation();
+        const piece = this.getPieceAt(row, col);
+
+        if (piece && piece.color === 'white') {
+            this.selectedPiece = { row, col };
+        }
+    }
+
+    onCellClick(row: number, col: number): void {
+        if (this.selectedPiece && this.isValidMove(row, col)) {
+            // Déplacer la pièce
+            const piece = this.getPieceAt(this.selectedPiece.row, this.selectedPiece.col);
+            if (piece) {
+                piece.position = { row, col };
+                this.selectedPiece = null;
+            }
+        } else if (!this.getPieceAt(row, col)) {
+            // Désélectionner si on clique sur une case vide
+            this.selectedPiece = null;
+        }
+    }
+
     enterClan() {
         console.log('Bienvenue dans le clan Nara !');
-        // Ici vous pourriez ajouter une navigation ou une animation
     }
 } 
