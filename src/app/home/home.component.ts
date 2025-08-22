@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MangaModalComponent, MangaModalData } from '../manga-modal/manga-modal.component';
 
 interface ShogiPiece {
     type: string;
@@ -12,7 +13,7 @@ interface ShogiPiece {
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, MangaModalComponent],
     template: `
     <div class="manga-page-container">
       <!-- En-tête manga avec titre stylisé -->
@@ -156,6 +157,13 @@ interface ShogiPiece {
         </div>
       </footer>
     </div>
+
+    <!-- Modale manga pour les mouvements -->
+    <app-manga-modal 
+      [isVisible]="showMangaModal" 
+      [data]="modalData"
+      (closeEvent)="closeMangaModal()">
+    </app-manga-modal>
   `,
     styleUrls: ['./home.component.scss']
 })
@@ -167,6 +175,16 @@ export class HomeComponent {
     selectedPiece: { row: number; col: number } | null = null;
     draggedPiece: { row: number; col: number } | null = null;
     dragOverCell: { row: number; col: number } | null = null;
+
+    // Propriétés pour la modale manga
+    showMangaModal: boolean = false;
+    modalData: MangaModalData = {
+        title: 'Mouvement Tactique',
+        text: 'Une stratégie brillante du Clan Nara !',
+        imageSrc: 'assets/Nara_Symbol.png',
+        pieceType: '王',
+        moveDescription: 'Le Roi avance dans l\'ombre...'
+    };
 
     // Types de pièces avec leurs kanji
     pieceTypes = [
@@ -330,7 +348,12 @@ export class HomeComponent {
         if (this.draggedPiece && this.isValidMove(row, col)) {
             const piece = this.getPieceAt(this.draggedPiece.row, this.draggedPiece.col);
             if (piece) {
+                const fromRow = piece.position.row;
+                const fromCol = piece.position.col;
                 piece.position = { row, col };
+
+                // Afficher la modale manga après le déplacement
+                this.showMoveModal(piece, fromRow, fromCol, row, col);
             }
         }
 
@@ -358,7 +381,13 @@ export class HomeComponent {
             // Déplacer la pièce
             const piece = this.getPieceAt(this.selectedPiece.row, this.selectedPiece.col);
             if (piece) {
+                const fromRow = piece.position.row;
+                const fromCol = piece.position.col;
                 piece.position = { row, col };
+
+                // Afficher la modale manga après le déplacement
+                this.showMoveModal(piece, fromRow, fromCol, row, col);
+
                 this.selectedPiece = null;
             }
         } else if (!this.getPieceAt(row, col)) {
@@ -369,5 +398,66 @@ export class HomeComponent {
 
     enterClan() {
         console.log('Bienvenue dans le clan Nara !');
+    }
+
+    // Méthodes pour la modale manga
+    showMoveModal(piece: ShogiPiece, fromRow: number, fromCol: number, toRow: number, toCol: number) {
+        const pieceName = this.getPieceName(piece.type);
+        const moveDescription = this.getMoveDescription(piece, fromRow, fromCol, toRow, toCol);
+
+        this.modalData = {
+            title: `${pieceName} en Action !`,
+            text: `Le ${pieceName} du Clan Nara exécute une manœuvre tactique. Les ombres dansent autour de cette pièce stratégique, révélant la sagesse ancestrale du clan.`,
+            imageSrc: 'assets/Nara_Symbol.png',
+            pieceType: piece.kanji,
+            moveDescription: moveDescription
+        };
+
+        this.showMangaModal = true;
+    }
+
+    closeMangaModal() {
+        this.showMangaModal = false;
+    }
+
+    getPieceName(type: string): string {
+        const names: { [key: string]: string } = {
+            '王': 'Roi',
+            '金': 'Général d\'Or',
+            '銀': 'Général d\'Argent',
+            '桂': 'Cavalier',
+            '香': 'Lance',
+            '飛': 'Tour',
+            '角': 'Fou',
+            '步': 'Pion'
+        };
+        return names[type] || 'Pièce Mystérieuse';
+    }
+
+    getMoveDescription(piece: ShogiPiece, fromRow: number, fromCol: number, toRow: number, toCol: number): string {
+        const direction = this.getDirection(fromRow, fromCol, toRow, toCol);
+        const pieceName = this.getPieceName(piece.type);
+
+        const descriptions: { [key: string]: string[] } = {
+            'forward': [`${pieceName} avance avec détermination`, `Progression tactique vers l'avant`, `Mouvement offensif calculé`],
+            'backward': [`${pieceName} recule stratégiquement`, `Repli tactique maîtrisé`, `Mouvement défensif sage`],
+            'left': [`${pieceName} glisse vers la gauche`, `Flanquement par l'ouest`, `Manœuvre latérale`],
+            'right': [`${pieceName} se déplace vers la droite`, `Flanquement par l'est`, `Attaque par le flanc`],
+            'diagonal': [`${pieceName} attaque en diagonale`, `Mouvement oblique redoutable`, `Frappe angulaire précise`]
+        };
+
+        const options = descriptions[direction] || [`${pieceName} exécute un mouvement mystérieux`];
+        return options[Math.floor(Math.random() * options.length)];
+    }
+
+    getDirection(fromRow: number, fromCol: number, toRow: number, toCol: number): string {
+        const rowDiff = toRow - fromRow;
+        const colDiff = toCol - fromCol;
+
+        if (rowDiff === 0 && colDiff > 0) return 'right';
+        if (rowDiff === 0 && colDiff < 0) return 'left';
+        if (rowDiff > 0 && colDiff === 0) return 'forward';
+        if (rowDiff < 0 && colDiff === 0) return 'backward';
+        return 'diagonal';
     }
 } 
